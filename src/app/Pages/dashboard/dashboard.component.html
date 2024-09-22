@@ -1,2 +1,179 @@
+<!-- <div class="row">
+    <div class="col-12">
+        <table mat-table [dataSource]="pagedUserList" class="mat-elevation-z8">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>User Id</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Email Id</th>
+                    <th>Mobile No</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of userList; let i = index">
+                    <td>{{i + 1 }}</td>
+                    <td>
+                        @if(user.isEdit) {
+                        <input type="text" id="name" [(ngModel)]="user.userId" class="form-control" disabled="" />
+                        } @else {
+                        {{user.userId}}
+                        }
+                    </td>
+                    <td>
+                        @if(user.isEdit) {
+                        <input type="text" id="name" [(ngModel)]="user.firstName" class="form-control" />
+                        } @else {
+                        {{user.firstName}}
+                        }
+                    </td>
+                    <td>
+                        @if(user.isEdit) {
+                        <input type="text" id="name" [(ngModel)]="user.middleName" class="form-control" />
+                        } @else {
+                        {{user.middleName}}
+                        }
+                    </td>
+                    <td>
+                        @if(user.isEdit) {
+                        <input type="text" id="name" [(ngModel)]="user.lastName" class="form-control" />
+                        } @else {
+                        {{user.lastName}}
+                        }
+                    </td>
+                    <td>
+                        @if(user.isEdit) {
+                        <input type="text" id="name" [(ngModel)]="user.emailId" class="form-control" />
+                        } @else {
+                        {{user.emailId}}
+                        }
+                    </td>
+                    <td>
+                        @if(user.isEdit) {
+                        <input type="text" id="name" [(ngModel)]="user.mobileNo" class="form-control" />
+                        } @else {
+                        {{user.mobileNo}}
+                        }
+                    </td>
+                    <td>
+                        @if (user.isEdit) {
+                        <button class="btn btn-sm btn-success" (click)="onUpdate(user)">Update</button>
+                        <button class="btn btn-sm btn-success" (click)="user.isEdit = false">Canel</button>
+                        } @else {
+                        <button class="btn btn-sm btn-success" (click)="onEdit(user)">Edit</button>
+                        <button class="btn btn-sm btn-danger" (click)="onDelete(user)">Delete</button>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-<p> {{userList | json }}</p>
+        <mat-paginator 
+                [length]="totalUsers"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 20]"
+                aria-label="Select page"
+                (page)="onPageChange($event)">
+        </mat-paginator>
+    </div>
+</div> -->
+
+<div class="row">
+    <div class="col-12">
+        <table mat-table [dataSource]="pagedUserList" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="srNo">
+                <th mat-header-cell *matHeaderCellDef> Sr No </th>
+                <td mat-cell *matCellDef="let user; let i = index"> {{ i + 1 }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="userId">
+                <th mat-header-cell *matHeaderCellDef> User Id </th>
+                <td mat-cell *matCellDef="let user">
+                    <mat-form-field *ngIf="editableUser === user">
+                        <input matInput [(ngModel)]="user.userId" disabled>
+                    </mat-form-field>
+                    <span *ngIf="editableUser !== user"> {{ user.userId }} </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef> First Name </th>
+                <td mat-cell *matCellDef="let user">
+                    <mat-form-field *ngIf="editableUser === user">
+                        <input matInput [(ngModel)]="user.firstName">
+                    </mat-form-field>
+                    <span *ngIf="editableUser !== user"> {{ user.firstName }} </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="middleName">
+                <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+                <td mat-cell *matCellDef="let user">
+                    <mat-form-field *ngIf="editableUser === user">
+                        <input matInput [(ngModel)]="user.middleName">
+                    </mat-form-field>
+                    <span *ngIf="editableUser !== user"> {{ user.middleName }} </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                <td mat-cell *matCellDef="let user">
+                    <mat-form-field *ngIf="editableUser === user">
+                        <input matInput [(ngModel)]="user.lastName">
+                    </mat-form-field>
+                    <span *ngIf="editableUser !== user"> {{ user.lastName }} </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="emailId">
+                <th mat-header-cell *matHeaderCellDef> Email Id </th>
+                <td mat-cell *matCellDef="let user">
+                    <mat-form-field *ngIf="editableUser === user">
+                        <input matInput [(ngModel)]="user.emailId">
+                    </mat-form-field>
+                    <span *ngIf="editableUser !== user"> {{ user.emailId }} </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="mobileNo">
+                <th mat-header-cell *matHeaderCellDef> Mobile No </th>
+                <td mat-cell *matCellDef="let user">
+                    <mat-form-field *ngIf="editableUser === user">
+                        <input matInput [(ngModel)]="user.mobileNo">
+                    </mat-form-field>
+                    <span *ngIf="editableUser !== user"> {{ user.mobileNo }} </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let user">
+                    <div *ngIf="editableUser === user">
+                        <button mat-button (click)="onUpdate(user)">Update</button>
+                        <button mat-button (click)="editableUser = null">Cancel</button>
+                    </div>
+                    <div *ngIf="editableUser !== user">
+                        <button mat-button (click)="onEdit(user)">Edit</button>
+                        <button mat-button (click)="onDelete(user)">Delete</button>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row
+                *matHeaderRowDef="['srNo', 'userId', 'firstName', 'middleName', 'lastName', 'emailId', 'mobileNo', 'action']">
+            </tr>
+            <tr mat-row
+                *matRowDef="let row; columns: ['srNo', 'userId', 'firstName', 'middleName', 'lastName', 'emailId', 'mobileNo', 'action']">
+            </tr>
+        </table>
+
+        <mat-paginator [length]="totalUsers" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page"
+            (page)="onPageChange($event)">
+        </mat-paginator>
+    </div>
+</div>
